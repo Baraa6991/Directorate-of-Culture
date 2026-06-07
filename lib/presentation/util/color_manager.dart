@@ -1,0 +1,12 @@
+import 'package:flutter/material.dart';
+
+abstract class ColorManager {
+  static const Color darkForestGreen = Color(0xFF1A3D2B);
+  static const Color deepGreen = Color(0xFF1B4D2E);
+  static const Color mediumGreen = Color(0xFF2A6040);
+  static const Color lightGreen = Color(0xFFA5D6A7);
+  static const Color accentGreen = Color(0xFF4CAF50);
+  static const Color titleWhite = Color(0xFFFFFFFF);
+  static const Color subtitleGreen = Color(0xFF9DC8A0);
+  static const Color black = Color(0xFF000000);
+}
