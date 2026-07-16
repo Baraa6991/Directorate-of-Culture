@@ -6,9 +6,6 @@ class ApiClient {
   ApiClient({Dio? dio}) : _dio = dio ?? Dio() {
     _dio.options.headers = {'Accept': 'application/json'};
     _dio.options.contentType = Headers.jsonContentType;
-
-    // ممكن تضيف interceptors هنا (توكن، لوق، refresh token...)
-    // _dio.interceptors.add(LogInterceptor(responseBody: true));
   }
 
   Future<Map<String, dynamic>> get(String path, {Map<String, dynamic>? query}) async {
@@ -17,6 +14,16 @@ class ApiClient {
 
   Future<Map<String, dynamic>> post(String path, {dynamic data}) async {
     return _handle(() => _dio.post(path, data: data));
+  }
+
+  // ====================== POST FORM-DATA ======================
+  Future<Map<String, dynamic>> postFormData(
+    String path, {
+    required Map<String, dynamic> data,
+  }) async {
+    return _handle(
+      () => _dio.post(path, data: FormData.fromMap(data)),
+    );
   }
 
   Future<Map<String, dynamic>> put(String path, {dynamic data}) async {
@@ -34,7 +41,6 @@ class ApiClient {
       final response = await request();
       return response.data;
     } on DioException catch (e) {
-      // معالجة موحدة للأخطاء (رسائل السيرفر، انقطاع الشبكة...)
       throw Exception(e.response?.data['message'] ?? 'حدث خطأ في الاتصال');
     }
   }

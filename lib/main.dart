@@ -1,13 +1,11 @@
-import 'package:directorateofculture/presentation/pages/Center%20Details/page/center_details.dart';
-import 'package:directorateofculture/presentation/pages/Center%20Details/page/confirm_booking_screen.dart';
-import 'package:directorateofculture/presentation/pages/Center%20Details/page/hall_details.dart';
-import 'package:directorateofculture/presentation/pages/Home/page/CulturalSitesScreen.dart';
-import 'package:directorateofculture/presentation/pages/Home/page/home_page_screen.dart';
-import 'package:directorateofculture/presentation/pages/Volunteer/page/volunteer_form_screen.dart';
+import 'package:directorateofculture/Helper/cach_helper.dart';
+import 'package:directorateofculture/presentation/pages/Splash/page/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
+void main() async{
+   WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper.init();
   runApp(const MyApp());
 }
 
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Directorate Of Culture',
-          home:  HomePageScreen(),
+          home: Splash(),
         );
       },
     );

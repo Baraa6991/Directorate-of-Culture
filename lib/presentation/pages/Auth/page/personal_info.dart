@@ -1,24 +1,34 @@
+import 'package:directorateofculture/presentation/pages/Auth/page/login.dart';
+import 'package:directorateofculture/presentation/pages/Auth/page/otpValidation.dart';
 import 'package:directorateofculture/presentation/pages/Auth/widget/personal_Info_cubit.dart';
 import 'package:directorateofculture/presentation/pages/Auth/widget/personal_Info_state.dart';
 import 'package:directorateofculture/Constant/color_manager.dart';
+import 'package:directorateofculture/presentation/pages/Auth/widget/register_cubit.dart';
+import 'package:directorateofculture/presentation/util/SnackBar.dart';
 import 'package:directorateofculture/presentation/util/custom_elevatedButton.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:directorateofculture/presentation/util/custom_textfield.dart';
+import 'package:directorateofculture/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 import 'package:intl/intl.dart';
-    
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class PersonalInfo extends StatelessWidget {
   const PersonalInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PersonalInfoCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => PersonalInfoCubit()),
+        BlocProvider(
+          create: (context) => RegisterCubit(repository: ApiRepository()),
+        ),
+      ],
       child: const _PersonalInfoView(),
     );
   }
@@ -27,9 +37,21 @@ class PersonalInfo extends StatelessWidget {
 class _PersonalInfoView extends StatelessWidget {
   const _PersonalInfoView();
 
+  void _onNextPressed(BuildContext context) {
+    final personalInfoCubit = context.read<PersonalInfoCubit>();
+    final personalInfoState = personalInfoCubit.state;
+
+    context.read<RegisterCubit>().register(
+      name: personalInfoCubit.fullName,
+      phone: personalInfoCubit.phoneNumber,
+      birthdate: personalInfoState.selectedBirthdate,
+      gender: personalInfoState.selectedGender,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final birthdateController = TextEditingController();
+    final personalInfoCubit = context.read<PersonalInfoCubit>();
 
     return Scaffold(
       backgroundColor: ColorManager.darkForestGreen,
@@ -71,7 +93,7 @@ class _PersonalInfoView extends StatelessWidget {
                       children: [
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () => Navigator.of(context).maybePop(),
                           child: Container(
                             width: 44.w,
                             height: 44.w,
@@ -130,6 +152,7 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 8.h),
                           CustomTextfield(
+                            controller: personalInfoCubit.firstNameController,
                             cursorColor: ColorManager.deepGreen,
                             hint: 'e.g. Ahmed',
                             border: OutlineInputBorder(
@@ -147,6 +170,7 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 8.h),
                           CustomTextfield(
+                            controller: personalInfoCubit.lastNameController,
                             cursorColor: ColorManager.deepGreen,
                             hint: 'e.g. Mansour',
                             border: OutlineInputBorder(
@@ -166,12 +190,14 @@ class _PersonalInfoView extends StatelessWidget {
                           BlocBuilder<PersonalInfoCubit, PersonalInfoState>(
                             builder: (context, state) {
                               if (state.selectedBirthdate != null) {
-                                birthdateController.text = DateFormat(
-                                  'dd / MM / yyyy',
-                                ).format(state.selectedBirthdate!);
+                                personalInfoCubit.birthdateController.text =
+                                    DateFormat(
+                                      'dd / MM / yyyy',
+                                    ).format(state.selectedBirthdate!);
                               }
                               return CustomTextfield(
-                                controller: birthdateController,
+                                controller:
+                                    personalInfoCubit.birthdateController,
                                 readOnly: true,
                                 onTap: () {
                                   picker.DatePicker.showDatePicker(
@@ -225,6 +251,28 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 18.h),
                           CustomText(
+                            'Phone Number',
+                            color: ColorManager.darkForestGreen,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          SizedBox(height: 10.h),
+                          IntlPhoneField(
+                            decoration: InputDecoration(
+                              hintText: '09xxxxxxxx',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            initialCountryCode: 'SY',
+                            onChanged: (phone) {
+                              personalInfoCubit.updatePhoneNumber(
+                                phone.completeNumber,
+                              );
+                            },
+                          ),
+                          SizedBox(height: 18.h),
+                          CustomText(
                             'Gender',
                             color: ColorManager.darkForestGreen,
                             fontSize: 14,
@@ -247,7 +295,7 @@ class _PersonalInfoView extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: state.selectedGender == 'Male'
                                               ? ColorManager.lightGreen
-                                                  .withOpacity(0.25)
+                                                    .withOpacity(0.25)
                                               : ColorManager.titleWhite,
                                           borderRadius: BorderRadius.circular(
                                             20.r,
@@ -257,7 +305,8 @@ class _PersonalInfoView extends StatelessWidget {
                                                 state.selectedGender == 'Male'
                                                 ? ColorManager.deepGreen
                                                 : ColorManager.subtitleGreen,
-                                            width: state.selectedGender == 'Male'
+                                            width:
+                                                state.selectedGender == 'Male'
                                                 ? 2
                                                 : 1,
                                           ),
@@ -306,20 +355,18 @@ class _PersonalInfoView extends StatelessWidget {
                                           color:
                                               state.selectedGender == 'Female'
                                               ? ColorManager.lightGreen
-                                                  .withOpacity(0.25)
+                                                    .withOpacity(0.25)
                                               : ColorManager.titleWhite,
                                           borderRadius: BorderRadius.circular(
                                             20.r,
                                           ),
                                           border: Border.all(
                                             color:
-                                                state.selectedGender ==
-                                                    'Female'
+                                                state.selectedGender == 'Female'
                                                 ? ColorManager.deepGreen
                                                 : ColorManager.subtitleGreen,
                                             width:
-                                                state.selectedGender ==
-                                                    'Female'
+                                                state.selectedGender == 'Female'
                                                 ? 2
                                                 : 1,
                                           ),
@@ -359,25 +406,94 @@ class _PersonalInfoView extends StatelessWidget {
                             },
                           ),
                           SizedBox(height: 28.h),
-                          CustomElevatedButton(
-                            onPressed: () {},
-                            backgroundColor: ColorManager.deepGreen,
-                            foregroundColor: ColorManager.titleWhite,
-                            radius: 28,
-                            fixedSize: const Size(double.infinity, 58),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomText(
-                                  'Next',
-                                  color: ColorManager.titleWhite,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                          BlocConsumer<RegisterCubit, RegisterState>(
+                            listener: (context, state) {
+                              if (state is RegisterSuccess) {
+                                AppSnackBar.show(context, state.message);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => Otpvalidation(
+                                      phone: personalInfoCubit.phoneNumber,
+                                    ),
+                                  ),
+                                );
+                              } else if (state is RegisterError) {
+                                AppSnackBar.show(
+                                  context,
+                                  state.message,
+                                  success: false,
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              final isLoading = state is RegisterLoading;
+                              return CustomElevatedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => _onNextPressed(context),
+                                backgroundColor: ColorManager.deepGreen,
+                                foregroundColor: ColorManager.titleWhite,
+                                radius: 28,
+                                fixedSize: const Size(double.infinity, 58),
+                                child: isLoading
+                                    ? SizedBox(
+                                        width: 24.w,
+                                        height: 24.w,
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2.5,
+                                        ),
+                                      )
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CustomText(
+                                            'Next',
+                                            color: ColorManager.titleWhite,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          SizedBox(width: 10.w),
+                                          const Icon(
+                                            Icons.arrow_forward_rounded,
+                                          ),
+                                        ],
+                                      ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 20.h),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomText(
+                                "Already have an account?",
+                                color: ColorManager.darkForestGreen,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+
+                              SizedBox(width: 5.w),
+
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const Login(), 
+                                    ),
+                                  );
+                                },
+                                child: CustomText(
+                                  "Login",
+                                  color: ColorManager.deepGreen,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                                SizedBox(width: 10.w),
-                                const Icon(Icons.arrow_forward_rounded),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
