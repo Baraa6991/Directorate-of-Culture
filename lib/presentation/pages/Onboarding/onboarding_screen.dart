@@ -1,7 +1,7 @@
 import 'package:directorateofculture/presentation/pages/Onboarding/Onboarding1-Discover.dart';
 import 'package:directorateofculture/presentation/pages/Onboarding/Onboarding2-Discover.dart';
 import 'package:directorateofculture/presentation/pages/Onboarding/Onboarding3Discover.dart';
-import 'package:directorateofculture/presentation/util/color_manager.dart';
+import 'package:directorateofculture/Constant/color_manager.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatelessWidget {

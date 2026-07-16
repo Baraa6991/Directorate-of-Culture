@@ -9,4 +9,7 @@ abstract class ColorManager {
   static const Color titleWhite = Color(0xFFFFFFFF);
   static const Color subtitleGreen = Color(0xFF9DC8A0);
   static const Color black = Color(0xFF000000);
+  static const Color lightGray = Color(0xFFBDBDBD);
+  static const Color gray = Color(0xFF9E9E9E);
+  static const Color lightBackground = Color(0xFFF5F5F5); 
 }

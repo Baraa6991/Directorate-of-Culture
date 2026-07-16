@@ -1,5 +1,5 @@
-import 'package:directorateofculture/presentation/util/assets_manager.dart';
-import 'package:directorateofculture/presentation/util/color_manager.dart';
+import 'package:directorateofculture/Constant/assets_manager.dart';
+import 'package:directorateofculture/Constant/color_manager.dart';
 import 'package:directorateofculture/presentation/util/custom_elevatedButton.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:flutter/material.dart';

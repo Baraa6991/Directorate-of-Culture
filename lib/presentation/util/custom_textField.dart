@@ -30,6 +30,7 @@ class CustomTextfield extends StatelessWidget {
 
   // ─── الزخرفة ──────────────────────────────────────────────
   final String? hint;
+  final Color? hintColor;
   final String? label;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -39,6 +40,8 @@ class CustomTextfield extends StatelessWidget {
   final String? errorText;
   final InputBorder? border;
   final Color? focusColor;
+  final bool filled;
+  final Color? fillColor;
 
   // ─── السلوك ───────────────────────────────────────────────
   final bool obscureText;
@@ -64,7 +67,7 @@ class CustomTextfield extends StatelessWidget {
   const CustomTextfield({
     super.key,
     this.controller,
-    this.focusColor, 
+    this.focusColor,
     this.focusNode,
     this.undoController,
     this.keyboardType,
@@ -81,6 +84,9 @@ class CustomTextfield extends StatelessWidget {
     this.cursorColor,
     this.showCursor,
     this.hint,
+    this.hintColor,
+    this.filled = false,
+    this.fillColor,
     this.label,
     this.prefixIcon,
     this.suffixIcon,
@@ -135,8 +141,10 @@ class CustomTextfield extends StatelessWidget {
       onEditingComplete: onEditingComplete,
       scrollController: scrollController,
       decoration: InputDecoration(
-        
+        filled: filled,
+        fillColor: fillColor,
         hintText: hint,
+        hintStyle: TextStyle(color: hintColor),
         labelText: label,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
@@ -147,10 +155,7 @@ class CustomTextfield extends StatelessWidget {
         border: border,
         enabledBorder: border,
         focusedBorder: border?.copyWith(
-          borderSide: BorderSide(
-            color: focusColor!,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: focusColor!, width: 2),
         ),
       ),
       obscureText: obscureText,
