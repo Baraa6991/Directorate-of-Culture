@@ -11,5 +11,15 @@ abstract class ColorManager {
   static const Color black = Color(0xFF000000);
   static const Color lightGray = Color(0xFFBDBDBD);
   static const Color gray = Color(0xFF9E9E9E);
-  static const Color lightBackground = Color(0xFFF5F5F5); 
+  static const Color lightBackground = Color(0xFFF5F5F5);
+
+  // Events feature badges/ratings
+  static const Color liveBadge = Color(0xFFF5A623);
+  static const Color premiumBadge = Color(0xFFF6D9A0);
+  static const Color starRating = Color(0xFFFFA000);
+
+  // Profile / Archive feature — membership badge + reservation status colors
+  static const Color goldMemberText = Color(0xFF8A6D1F);
+  static const Color rejectedRed = Color(0xFFD32F2F);
+  static const Color awaitingBlue = Color(0xFF1976D2);
 }

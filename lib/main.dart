@@ -3,6 +3,7 @@ import 'package:directorateofculture/presentation/pages/Center%20Details/page/co
 import 'package:directorateofculture/presentation/pages/Center%20Details/page/hall_details.dart';
 import 'package:directorateofculture/presentation/pages/Home/page/CulturalSitesScreen.dart';
 import 'package:directorateofculture/presentation/pages/Home/page/home_page_screen.dart';
+import 'package:directorateofculture/presentation/pages/Main/page/main_shell.dart';
 import 'package:directorateofculture/presentation/pages/Volunteer/page/volunteer_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Directorate Of Culture',
-          home:  HomePageScreen(),
+          home: const MainShell(),
         );
       },
     );
