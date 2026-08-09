@@ -1,6 +1,8 @@
 import 'package:directorateofculture/Constant/color_manager.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class BookingInfoRow extends StatelessWidget {
   final IconData icon;
@@ -23,29 +25,29 @@ class BookingInfoRow extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
           child: Row(
             children: [
               Container(
-                width: 38,
-                height: 38,
+                width: 38.w,
+                height: 38.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: ColorManager.lightGreen.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(icon, size: 18, color: ColorManager.darkForestGreen),
+                child: Icon(icon, size: 18.sp, color: ColorManager.darkForestGreen),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomText(label, fontSize: 12, color: ColorManager.gray),
-                    const SizedBox(height: 2),
+                    CustomText(label, fontSize: 12.sp, color: ColorManager.gray),
+                    SizedBox(height: 2.h),
                     CustomText(
                       value,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: ColorManager.black,
                     ),
@@ -56,7 +58,7 @@ class BookingInfoRow extends StatelessWidget {
             ],
           ),
         ),
-        if (showDivider) Divider(color: ColorManager.lightGray.withOpacity(0.3), height: 1),
+        if (showDivider) Divider(color: ColorManager.lightGray.withOpacity(0.3), height: 1.h),
       ],
     );
   }

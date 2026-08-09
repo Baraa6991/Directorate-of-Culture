@@ -74,8 +74,8 @@ class _AdBannerViewState extends State<_AdBannerView> {
               ),
               Positioned(
                 bottom: 12.h,
-                left: 0,
-                right: 0,
+                left: 0.w,
+                right: 0.w,
                 child: Center(
                   child: SmoothPageIndicator(
                     controller: _pageController,
@@ -119,34 +119,33 @@ class _AdCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.r),
-          //
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.r)),
         child: Padding(
           padding: EdgeInsets.all(18.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(20.r),
+              if (ad.badgeText.isNotEmpty) ...[
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: CustomText(
+                    ad.badgeText,
+                    color: ColorManager.titleWhite,
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                child: CustomText(
-                  ad.badgeText,
-                  color: ColorManager.titleWhite,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10.h),
+                SizedBox(height: 10.h),
+              ],
               CustomText(
                 ad.title,
                 color: ColorManager.titleWhite,
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
                 height: 1.2,
               ),
@@ -154,53 +153,41 @@ class _AdCard extends StatelessWidget {
               CustomText(
                 ad.description,
                 color: ColorManager.titleWhite,
-                fontSize: 13,
+                fontSize: 13.sp,
                 height: 1.3,
               ),
-              SizedBox(height: 10.h),
-              Row(
-                children: [
-                  Icon(
-                    Icons.calendar_today,
-                    size: 14.sp,
-                    color: ColorManager.titleWhite,
-                  ),
-                  SizedBox(width: 6.w),
-                  CustomText(
-                    ad.dateText,
-                    color: ColorManager.titleWhite,
-                    fontSize: 12,
-                  ),
-                ],
-              ),
-              SizedBox(height: 4.h),
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    size: 14.sp,
-                    color: ColorManager.titleWhite,
-                  ),
-                  SizedBox(width: 6.w),
-                  CustomText(
-                    ad.locationText,
-                    color: ColorManager.titleWhite,
-                    fontSize: 12,
-                  ),
-                ],
-              ),
+              if (ad.dateText.isNotEmpty) ...[
+                SizedBox(height: 10.h),
+                Row(
+                  children: [
+                    Icon(Icons.calendar_today, size: 14.sp, color: ColorManager.titleWhite),
+                    SizedBox(width: 6.w),
+                    CustomText(ad.dateText, color: ColorManager.titleWhite, fontSize: 12.sp),
+                  ],
+                ),
+              ],
+              if (ad.locationText.isNotEmpty) ...[
+                SizedBox(height: 4.h),
+                Row(
+                  children: [
+                    Icon(Icons.location_on_outlined, size: 14.sp, color: ColorManager.titleWhite),
+                    SizedBox(width: 6.w),
+                    CustomText(ad.locationText, color: ColorManager.titleWhite, fontSize: 12.sp),
+                  ],
+                ),
+              ],
               SizedBox(height: 14.h),
               CustomElevatedButton(
-                onPressed: () {},
+                onPressed: () {}, 
                 backgroundColor: ColorManager.deepGreen,
                 foregroundColor: ColorManager.titleWhite,
-                radius: 22,
+                radius: 22.r,
                 paddingHorizontal: 22,
                 paddingVertical: 10,
                 child: CustomText(
                   ad.buttonText,
                   color: ColorManager.titleWhite,
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),

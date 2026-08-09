@@ -1,20 +1,20 @@
 class AdBannerItem {
   final String imageUrl;
-  final String badgeText;
   final String title;
   final String description;
+  final String badgeText;
   final String dateText;
   final String locationText;
   final String buttonText;
 
   AdBannerItem({
     required this.imageUrl,
-    required this.badgeText,
     required this.title,
     required this.description,
-    required this.dateText,
-    required this.locationText,
-    this.buttonText = 'Book Now',
+    this.badgeText = '',
+    this.dateText = '',
+    this.locationText = '',
+    this.buttonText = 'احجز الآن',
   });
 }
 

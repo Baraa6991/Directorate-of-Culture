@@ -1,4 +1,5 @@
 import 'package:directorateofculture/presentation/pages/Auth/page/personal_info.dart';
+import 'package:directorateofculture/presentation/pages/Home/page/home_page_screen.dart';
 import 'package:directorateofculture/presentation/pages/Splash/widget/DiamondShape.dart';
 import 'package:directorateofculture/Constant/assets_manager.dart';
 import 'package:directorateofculture/Constant/color_manager.dart';
@@ -6,6 +7,7 @@ import 'package:directorateofculture/presentation/pages/Splash/widget/splash_blo
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Splash extends StatelessWidget {
   const Splash({super.key});
@@ -20,6 +22,10 @@ class Splash extends StatelessWidget {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => const PersonalInfo()),
             );
+          } else if (state is SplashNavigateToHome) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const HomePageScreen()),
+            );
           }
         },
         child: Scaffold(
@@ -30,7 +36,7 @@ class Splash extends StatelessWidget {
                 ClipRect(
                   child: SizedBox(
                     width: double.infinity,
-                    height: 130,
+                    height: 130.h,
                     child: Row(
                       children: List.generate(
                         3,
@@ -46,20 +52,20 @@ class Splash extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      const SizedBox(height: 70),
+                      SizedBox(height: 70.h),
                       Image.asset(AssetsManager.logo),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                       CustomText(
-                        "Directorate of Culture",
-                        fontSize: 30,
+                        'مديرية الثقافة',
+                        fontSize: 30.sp,
                         color: ColorManager.titleWhite,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       CustomText(
-                        "Bridging Heritage and Innovation",
+                        'نبني جسراً بين التراث والابتكار',
                         color: ColorManager.subtitleGreen,
                       ),
-                      const SizedBox(height: 130),
+                      SizedBox(height: 130.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -67,7 +73,7 @@ class Splash extends StatelessWidget {
                             Icons.account_balance,
                             color: ColorManager.lightGreen,
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Icon(
                             Icons.verified_user_outlined,
                             color: ColorManager.lightGreen,

@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'booking_cubit.dart';
 import 'booking_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class BookingDateTimePicker extends StatelessWidget {
   const BookingDateTimePicker({super.key});
@@ -15,7 +17,7 @@ class BookingDateTimePicker extends StatelessWidget {
     return CustomContainer(
       width: double.infinity,
       color: ColorManager.titleWhite,
-      radius: 24,
+      radius: 24.r,
       paddingAll: 20,
       shadowColor: Colors.black.withOpacity(0.06),
       shadowBlurRadius: 12,
@@ -23,21 +25,21 @@ class BookingDateTimePicker extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
-            'Select Date',
-            fontSize: 18,
+            'اختر التاريخ',
+            fontSize: 18.sp,
             fontWeight: FontWeight.bold,
             color: ColorManager.black,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           _CalendarSection(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           CustomText(
-            'Available Time Slots',
-            fontSize: 14,
+            'الأوقات المتاحة',
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: ColorManager.black,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           _TimeSlotsGrid(), // يدوي كما طلبت
         ],
       ),
@@ -67,10 +69,10 @@ class _CalendarSection extends StatelessWidget {
           headerStyle: HeaderStyle(
             titleCentered: false,
             formatButtonVisible: false,
-            leftChevronIcon: const Icon(Icons.chevron_left, size: 22),
-            rightChevronIcon: const Icon(Icons.chevron_right, size: 22),
+            leftChevronIcon: Icon(Icons.chevron_left, size: 22.sp),
+            rightChevronIcon: Icon(Icons.chevron_right, size: 22.sp),
             titleTextStyle: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: ColorManager.black,
             ),
@@ -80,12 +82,12 @@ class _CalendarSection extends StatelessWidget {
           daysOfWeekStyle: DaysOfWeekStyle(
             weekdayStyle: TextStyle(
               color: ColorManager.gray,
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w600,
             ),
             weekendStyle: TextStyle(
               color: ColorManager.gray,
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -118,14 +120,14 @@ class _CalendarSection extends StatelessWidget {
 
             todayDecoration: BoxDecoration(
               border: Border.all(color: ColorManager.darkForestGreen),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
               shape: BoxShape.rectangle,
             ),
             todayTextStyle: TextStyle(color: ColorManager.black),
 
             selectedDecoration: BoxDecoration(
               color: ColorManager.darkForestGreen,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
               shape: BoxShape.rectangle,
             ),
             selectedTextStyle: TextStyle(
@@ -133,7 +135,7 @@ class _CalendarSection extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
 
-            cellMargin: const EdgeInsets.all(4),
+            cellMargin: EdgeInsets.all(4.r),
           ),
         );
       },
@@ -151,8 +153,8 @@ class _TimeSlotsGrid extends StatelessWidget {
 
         if (state.availableTimes.isEmpty) {
           return CustomText(
-            'No available time slots',
-            fontSize: 13,
+            'لا توجد أوقات متاحة',
+            fontSize: 13.sp,
             color: ColorManager.gray,
           );
         }
@@ -178,11 +180,11 @@ class _TimeSlotsGrid extends StatelessWidget {
                   color: isSelected
                       ? ColorManager.darkForestGreen
                       : ColorManager.lightBackground,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: CustomText(
                   time,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
                   color: isSelected
                       ? ColorManager.titleWhite

@@ -1,21 +1,32 @@
-import 'package:directorateofculture/Constant/assets_manager.dart';
 import 'package:directorateofculture/Constant/color_manager.dart';
+import 'package:directorateofculture/presentation/pages/Events/Page/event_details_screen.dart';
+import 'package:directorateofculture/presentation/pages/Home/model/activity_model.dart';
 import 'package:directorateofculture/presentation/util/custom_elevatedButton.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class FeaturedEventsCart extends StatelessWidget {
-  const FeaturedEventsCart({super.key});
+  final ActivityModel activity;
+
+  const FeaturedEventsCart({super.key, required this.activity});
+
+  String get _formattedDate {
+    if (activity.startTime == null) return '';
+    return DateFormat('MMM d • HH:mm').format(activity.startTime!);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280,
-      margin: const EdgeInsets.only(right: 30),
+      width: 280.w,
+      margin: EdgeInsets.only(right: 30.w),
       decoration: BoxDecoration(
-        border: Border.all(color: ColorManager.gray,width: 1.5),
+        border: Border.all(color: ColorManager.gray, width: 1.5.w),
         color: ColorManager.titleWhite,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -34,89 +45,125 @@ class FeaturedEventsCart extends StatelessWidget {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
-                child: Image.asset(
-                  AssetsManager.onboarding1Discover,
-                  height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: (activity.image != null && activity.image!.isNotEmpty)
+                    ? Image.network(
+                        activity.image!,
+                        height: 150.h,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 150.h,
+                            color: ColorManager.lightBackground,
+                            child: Icon(
+                              Icons.image_outlined,
+                              color: ColorManager.gray,
+                            ),
+                          );
+                        },
+                      )
+                    : Container(
+                        height: 150.h,
+                        width: double.infinity,
+                        color: ColorManager.lightBackground,
+                        child: Icon(
+                          Icons.image_outlined,
+                          color: ColorManager.gray,
+                        ),
+                      ),
               ),
-              Positioned(
-                top: 12,
-                left: 12,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: ColorManager.accentGreen,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: CustomText(
-                    'LIVE NOW',
-                    color: ColorManager.titleWhite,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
+              // ====================== النوع فوق الصورة ======================
+              if (activity.type.isNotEmpty)
+                Positioned(
+                  top: 12.h,
+                  left: 12.w,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                    decoration: BoxDecoration(
+                      color: ColorManager.accentGreen,
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: CustomText(
+                      activity.type.toUpperCase(),
+                      color: ColorManager.titleWhite,
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                  'Arabian Calligraphy Exhibition',
+                  activity.title,
                   color: ColorManager.black,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      size: 14,
-                      color: ColorManager.black,
-                    ),
-                    const SizedBox(width: 6),
-                    CustomText(
-                      'Oct 24 • 18:00 - 21:00',
-                      color: ColorManager.black,
-                      fontSize: 13,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
+                SizedBox(height: 10.h),
+                if (_formattedDate.isNotEmpty)
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 14.sp,
+                        color: ColorManager.black,
+                      ),
+                      SizedBox(width: 6.w),
+                      CustomText(
+                        _formattedDate,
+                        color: ColorManager.black,
+                        fontSize: 13.sp,
+                      ),
+                    ],
+                  ),
+                SizedBox(height: 6.h),
+                // ====================== المركز التابع له ======================
                 Row(
                   children: [
                     Icon(
                       Icons.location_on_outlined,
-                      size: 14,
+                      size: 14.sp,
                       color: ColorManager.black,
                     ),
-                    const SizedBox(width: 6),
-                    CustomText(
-                      'National Arts Center',
-                      color: ColorManager.black,
-                      fontSize: 13,
+                    SizedBox(width: 6.w),
+                    Expanded(
+                      child: CustomText(
+                        activity.centerName ??
+                            'مركز رقم ${activity.culturalCenterId ?? "-"}',
+                        color: ColorManager.black,
+                        fontSize: 13.sp,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 17),
+                SizedBox(height: 17.h),
                 CustomElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            EventDetailsScreen(activityId: activity.id),
+                      ),
+                    );
+                  },
                   backgroundColor: ColorManager.deepGreen,
                   foregroundColor: ColorManager.titleWhite,
-                  radius: 24,
+                  radius: 24.r,
                   fixedSize: const Size(double.infinity, 46),
                   child: CustomText(
-                    'Book Now',
+                    'احجز الآن',
                     color: ColorManager.titleWhite,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

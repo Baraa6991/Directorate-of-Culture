@@ -22,7 +22,7 @@ class AppSnackBar {
             child: Text(
               message,
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 14.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),

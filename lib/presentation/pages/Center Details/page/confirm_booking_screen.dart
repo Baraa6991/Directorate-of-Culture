@@ -7,6 +7,8 @@ import 'package:directorateofculture/presentation/util/custom_elevatedButton.dar
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:directorateofculture/presentation/util/custom_textField.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class ConfirmBookingScreen extends StatelessWidget {
   const ConfirmBookingScreen({super.key});
@@ -14,14 +16,14 @@ class ConfirmBookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final features = const [
-      FacilityModel(iconKey: 'stage_lighting', label: 'Stage & Lighting'),
-      FacilityModel(iconKey: 'ac', label: 'Air Conditioning'),
-      FacilityModel(iconKey: 'sound_system', label: 'Sound System'),
-      FacilityModel(iconKey: 'seating', label: 'Seating (120)'),
-      FacilityModel(iconKey: 'projector', label: 'Projector & Screen'),
-      FacilityModel(iconKey: 'microphone', label: 'Microphones'),
-      FacilityModel(iconKey: 'wifi', label: 'Wi-Fi'),
-      FacilityModel(iconKey: 'parking', label: 'Parking Available'),
+      FacilityModel(iconKey: 'stage_lighting', label: 'المسرح والإضاءة'),
+      FacilityModel(iconKey: 'ac', label: 'تكييف الهواء'),
+      FacilityModel(iconKey: 'sound_system', label: 'نظام الصوت'),
+      FacilityModel(iconKey: 'seating', label: 'مقاعد (120)'),
+      FacilityModel(iconKey: 'projector', label: 'جهاز عرض وشاشة'),
+      FacilityModel(iconKey: 'microphone', label: 'ميكروفونات'),
+      FacilityModel(iconKey: 'wifi', label: 'واي فاي'),
+      FacilityModel(iconKey: 'parking', label: 'موقف سيارات متاح'),
     ];
 
     return Scaffold(
@@ -34,8 +36,8 @@ class ConfirmBookingScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: ColorManager.darkForestGreen),
         ),
         title: CustomText(
-          'Confirm Your Booking',
-          fontSize: 18,
+          'تأكيد حجزك',
+          fontSize: 18.sp,
           fontWeight: FontWeight.bold,
           color: ColorManager.darkForestGreen,
         ),
@@ -43,59 +45,59 @@ class ConfirmBookingScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomContainer(
                 width: double.infinity,
                 color: ColorManager.titleWhite,
-                radius: 20,
+                radius: 20.r,
                 paddingAll: 16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      'Al Ain Cultural Center',
-                      fontSize: 18,
+                      'مركز العين الثقافي',
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.darkForestGreen,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     CustomText(
-                      'Theater Hall',
-                      fontSize: 13,
+                      'قاعة المسرح',
+                      fontSize: 13.sp,
                       color: ColorManager.gray,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     BookingInfoRow(
                       icon: Icons.apartment,
-                      label: 'Center',
-                      value: 'Al Ain Cultural Center',
+                      label: 'المركز',
+                      value: 'مركز العين الثقافي',
                     ),
                     BookingInfoRow(
                       icon: Icons.location_on_outlined,
-                      label: 'Hall',
-                      value: 'Theater Hall',
+                      label: 'القاعة',
+                      value: 'قاعة المسرح',
                     ),
                     BookingInfoRow(
                       icon: Icons.calendar_today_outlined,
-                      label: 'Date',
-                      value: 'October 20, 2024',
+                      label: 'التاريخ',
+                      value: '20 أكتوبر 2024',
                     ),
                     BookingInfoRow(
                       icon: Icons.access_time,
-                      label: 'Time',
+                      label: 'الوقت',
                       value: '19:00 - 22:00',
                     ),
                     BookingInfoRow(
                       icon: Icons.groups_outlined,
-                      label: 'Capacity',
+                      label: 'السعة',
                       value: '120 Seats',
                     ),
                     BookingInfoRow(
                       icon: Icons.confirmation_number_outlined,
-                      label: 'Booking ID',
+                      label: 'رقم الحجز',
                       value: 'ACC-2024-1020-TH-01',
                       showDivider: false,
                     ),
@@ -103,23 +105,23 @@ class ConfirmBookingScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               CustomContainer(
                 width: double.infinity,
                 color: ColorManager.titleWhite,
-                radius: 20,
+                radius: 20.r,
                 paddingAll: 16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      'Hall Features & Amenities',
-                      fontSize: 15,
+                      'مرافق ومميزات القاعة',
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.darkForestGreen,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -139,46 +141,46 @@ class ConfirmBookingScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               CustomContainer(
                 width: double.infinity,
                 color: ColorManager.titleWhite,
-                radius: 20,
+                radius: 20.r,
                 paddingAll: 16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      'Your Information',
-                      fontSize: 15,
+                      'معلوماتك',
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.darkForestGreen,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     CustomText(
-                      'Please enter your details to confirm the booking',
-                      fontSize: 12,
+                      'أدخل بياناتك لتأكيد الحجز',
+                      fontSize: 12.sp,
                       color: ColorManager.gray,
                     ),
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     CustomText(
-                      'Full Name',
-                      fontSize: 13,
+                      'الاسم الكامل',
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: ColorManager.black,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     CustomTextfield(
-                      hint: 'Enter your full name',
+                      hint: 'أدخل اسمك الكامل',
                       hintColor: ColorManager.lightGray,
                       prefixIcon: Icon(
                         Icons.person_outline,
                         color: ColorManager.gray,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14.r),
                         borderSide: BorderSide(
                           color: ColorManager.lightGray.withOpacity(0.5),
                         ),
@@ -186,14 +188,14 @@ class ConfirmBookingScreen extends StatelessWidget {
                       focusColor: ColorManager.deepGreen,
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     CustomText(
-                      'Phone Number',
-                      fontSize: 13,
+                      'رقم الهاتف',
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: ColorManager.black,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     CustomTextfield(
                       hint: '05X XXX XXXX',
                       hintColor: ColorManager.lightGray,
@@ -203,7 +205,7 @@ class ConfirmBookingScreen extends StatelessWidget {
                         color: ColorManager.gray,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14.r),
                         borderSide: BorderSide(
                           color: ColorManager.lightGray.withOpacity(0.5),
                         ),
@@ -211,14 +213,14 @@ class ConfirmBookingScreen extends StatelessWidget {
                       focusColor: ColorManager.deepGreen,
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     CustomText(
-                      'National ID',
-                      fontSize: 13,
+                      'الرقم الوطني',
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: ColorManager.black,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     CustomTextfield(
                       hint: '784-XXXX-XXXXXXX-X',
                       hintColor: ColorManager.lightGray,
@@ -227,7 +229,7 @@ class ConfirmBookingScreen extends StatelessWidget {
                         color: ColorManager.gray,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14.r),
                         borderSide: BorderSide(
                           color: ColorManager.lightGray.withOpacity(0.5),
                         ),
@@ -238,55 +240,55 @@ class ConfirmBookingScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
                   onPressed: () {},
                   backgroundColor: ColorManager.darkForestGreen,
-                  radius: 28,
+                  radius: 28.r,
                   fixedSize: const Size(double.infinity, 58),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomText(
-                        'Confirm Booking',
+                        'تأكيد الحجز',
                         color: ColorManager.titleWhite,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
-                      const SizedBox(width: 8),
-                      const Icon(
+                      SizedBox(width: 8.w),
+                      Icon(
                         Icons.check_circle_outline,
                         color: Colors.white,
-                        size: 18,
+                        size: 18.sp,
                       ),
                     ],
                   ),
                 ),
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.lock_outline,
-                      size: 14,
+                      size: 14.sp,
                       color: ColorManager.gray,
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6.w),
                     CustomText(
-                      'Your information is secure and encrypted',
-                      fontSize: 11,
+                      'معلوماتك آمنة ومشفّرة',
+                      fontSize: 11.sp,
                       color: ColorManager.gray,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         ),

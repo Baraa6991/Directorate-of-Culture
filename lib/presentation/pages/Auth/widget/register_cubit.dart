@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  final ApiRepository repository;
+  final AuthRepository repository;
 
   RegisterCubit({required this.repository}) : super(RegisterInitial());
 

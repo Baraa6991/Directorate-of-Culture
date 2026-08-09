@@ -1,14 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:directorateofculture/presentation/pages/Volunteer/widget/checkbox.dart';
 import 'package:directorateofculture/presentation/pages/Volunteer/widget/section_card.dart';
 import 'package:directorateofculture/presentation/pages/Volunteer/widget/volunteer_form_cubit.dart';
 import 'package:directorateofculture/presentation/pages/Volunteer/widget/volunteer_form_state.dart';
+import 'package:directorateofculture/presentation/pages/Volunteer/page/volunteer_success_screen.dart';
 import 'package:directorateofculture/Constant/assets_manager.dart';
 import 'package:directorateofculture/Constant/color_manager.dart';
+import 'package:directorateofculture/presentation/util/SnackBar.dart';
 import 'package:directorateofculture/presentation/util/custom_elevatedButton.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:directorateofculture/presentation/util/custom_textField.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class VolunteerFormScreen extends StatelessWidget {
   const VolunteerFormScreen({super.key});
@@ -18,6 +22,35 @@ class VolunteerFormScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => VolunteerFormCubit(),
       child: const _VolunteerFormView(),
+    );
+  }
+}
+
+// ====================== Label بنجمة حمراء للحقول الإجبارية ======================
+class _FieldLabel extends StatelessWidget {
+  final String text;
+  final bool required;
+
+  const _FieldLabel(this.text, {this.required = true});
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          color: ColorManager.black,
+          fontSize: 13.sp,
+          fontWeight: FontWeight.normal,
+        ),
+        children: [
+          if (required)
+            const TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -36,7 +69,7 @@ class _VolunteerFormView extends StatelessWidget {
         title: CustomText(
           'طلب تطوع - دمشق',
           color: ColorManager.deepGreen,
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.bold,
         ),
         leading: IconButton(
@@ -44,716 +77,684 @@ class _VolunteerFormView extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: ColorManager.black),
         ),
       ),
+      // ====================== ربط السناك بار + العودة للهوم ======================
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // بانر علوي
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 140,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            ColorManager.darkForestGreen,
-                            ColorManager.deepGreen,
+        child: BlocListener<VolunteerFormCubit, VolunteerFormState>(
+          listener: (context, state) {
+            if (state.isSuccess && state.successMessage != null) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => VolunteerSuccessScreen(
+                    message: state.successMessage!,
+                  ),
+                ),
+              );
+            } else if (state.errorMessage != null) {
+              AppSnackBar.show(context, state.errorMessage!, success: false);
+            }
+          },
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(16.r),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // بانر علوي
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.r),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 140.h,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              ColorManager.darkForestGreen,
+                              ColorManager.deepGreen,
+                            ],
+                          ),
+                        ),
+                        child: Image.asset(
+                          AssetsManager.onboarding1Discover,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        left: 16.w,
+                        bottom: 14.h,
+                        right: 16.w,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              'كن جزءًا من الحراك الثقافي',
+                              color: ColorManager.titleWhite,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            SizedBox(height: 4.h),
+                            CustomText(
+                              'ساعدنا في إنجاح فعاليات مديرية الثقافة',
+                              color: ColorManager.subtitleGreen,
+                              fontSize: 12.sp,
+                            ),
                           ],
                         ),
                       ),
-                      child: Image.asset(
-                        AssetsManager.onboarding1Discover,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      left: 16,
-                      bottom: 14,
-                      right: 16,
-                      child: Column(
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20.h),
+
+                // ───────────── المعلومات الشخصية ─────────────
+                SectionCard(
+                  icon: Icons.person_outline,
+                  title: 'المعلومات الشخصية',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(
-                            'كن جزءًا من الحراك الثقافي',
-                            color: ColorManager.titleWhite,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    const _FieldLabel('الاسم'),
+                                    SizedBox(height: 6.h),
+                                    CustomTextfield(
+                                      hint: 'مثال: أحمد',
+                                      hintColor: ColorManager.lightGray,
+                                      filled: true,
+                                      fillColor: ColorManager.lightBackground,
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14.r),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusColor: ColorManager.deepGreen,
+                                      onChanged: (value) {
+                                        context
+                                            .read<VolunteerFormCubit>()
+                                            .updateFirstName(value);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    const _FieldLabel('الكنية'),
+                                    SizedBox(height: 6.h),
+                                    CustomTextfield(
+                                      hint: 'مثال: الحسن',
+                                      hintColor: ColorManager.lightGray,
+                                      filled: true,
+                                      fillColor: ColorManager.lightBackground,
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14.r),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusColor: ColorManager.deepGreen,
+                                      onChanged: (value) {
+                                        context
+                                            .read<VolunteerFormCubit>()
+                                            .updateLastName(value);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          CustomText(
-                            'ساعدنا في إنجاح فعاليات مديرية الثقافة',
-                            color: ColorManager.subtitleGreen,
-                            fontSize: 12,
+                          SizedBox(height: 14.h),
+                          const _FieldLabel('البريد الإلكتروني'),
+                          SizedBox(height: 6.h),
+                          CustomTextfield(
+                            hint: 'name@example.com',
+                            hintColor: ColorManager.lightGray,
+                            keyboardType: TextInputType.emailAddress,
+                            filled: true,
+                            fillColor: ColorManager.lightBackground,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusColor: ColorManager.deepGreen,
+                            onChanged: (value) {
+                              context
+                                  .read<VolunteerFormCubit>()
+                                  .updateEmail(value);
+                            },
+                          ),
+                          SizedBox(height: 14.h),
+                          const _FieldLabel('رقم الهاتف (واتساب)'),
+                          SizedBox(height: 6.h),
+                          CustomTextfield(
+                            hint: '09xx xxx xxx',
+                            hintColor: ColorManager.lightGray,
+                            keyboardType: TextInputType.phone,
+                            filled: true,
+                            fillColor: ColorManager.lightBackground,
+                            prefixIcon: const Icon(
+                              Icons.phone_outlined,
+                              color: ColorManager.gray,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusColor: ColorManager.deepGreen,
+                            onChanged: (value) {
+                              context
+                                  .read<VolunteerFormCubit>()
+                                  .updatePhone(value);
+                            },
+                          ),
+                          SizedBox(height: 14.h),
+                          const _FieldLabel('تاريخ الميلاد'),
+                          SizedBox(height: 6.h),
+                          CustomTextfield(
+                            hint: 'يوم-شهر-سنة',
+                            hintColor: ColorManager.lightGray,
+                            filled: true,
+                            fillColor: ColorManager.lightBackground,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusColor: ColorManager.deepGreen,
+                            onChanged: (value) {
+                              context
+                                  .read<VolunteerFormCubit>()
+                                  .updateBirthPlace(value);
+                            },
+                          ),
+                          SizedBox(height: 14.h),
+                          const _FieldLabel('مكان الإقامة'),
+                          SizedBox(height: 6.h),
+                          CustomTextfield(
+                            hint: 'مثال: دمشق',
+                            hintColor: ColorManager.lightGray,
+                            filled: true,
+                            fillColor: ColorManager.lightBackground,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusColor: ColorManager.deepGreen,
+                            onChanged: (value) {
+                              context
+                                  .read<VolunteerFormCubit>()
+                                  .updateResidence(value);
+                            },
                           ),
                         ],
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                SizedBox(height: 16.h),
 
-              // ───────────── المعلومات الشخصية ─────────────
-              SectionCard(
-                icon: Icons.person_outline,
-                title: 'المعلومات الشخصية',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    'الاسم',
-                                    color: ColorManager.black,
-                                    fontSize: 13,
-                                  ),
-                                  const SizedBox(height: 6),
-                                  CustomTextfield(
-                                    hint: 'مثال: أحمد',
-                                    hintColor: ColorManager.lightGray,
-                                    filled: true,
-                                    fillColor: ColorManager.lightBackground,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                      borderSide: BorderSide.none,
+                // ───────────── التعليم ─────────────
+                SectionCard(
+                  icon: Icons.school_outlined,
+                  title: 'التعليم',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const _FieldLabel('المستوى التعليمي'),
+                          SizedBox(height: 6.h),
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 14.w),
+                            decoration: BoxDecoration(
+                              color: ColorManager.lightBackground,
+                              borderRadius: BorderRadius.circular(14.r),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: state.educationLevel,
+                                isExpanded: true,
+                                hint: CustomText(
+                                  'اختر المستوى',
+                                  color: ColorManager.lightGray,
+                                  fontSize: 13.sp,
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: ColorManager.gray,
+                                ),
+                                items: [
+                                  'ثانوي',
+                                  'دبلوم',
+                                  'إدارة الأعمال',
+                                  'بكالوريوس',
+                                  'ماجستير',
+                                  'دكتوراه',
+                                ].map((level) {
+                                  return DropdownMenuItem(
+                                    value: level,
+                                    child: CustomText(
+                                      level,
+                                      color: ColorManager.black,
+                                      fontSize: 13.sp,
                                     ),
-                                    focusColor: ColorManager.deepGreen,
-                                    onChanged: (value) {
-                                      context
-                                          .read<VolunteerFormCubit>()
-                                          .updateFirstName(value);
-                                    },
-                                  ),
-                                ],
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    context
+                                        .read<VolunteerFormCubit>()
+                                        .updateEducationLevel(value);
+                                  }
+                                },
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 16.h),
+
+                // ───────────── الخبرة السابقة ─────────────
+                SectionCard(
+                  icon: Icons.headset_mic_outlined,
+                  title: 'الخبرة السابقة',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const _FieldLabel('هل تطوعت سابقاً؟'),
+                          Row(
+                            children: [
+                              Row(
                                 children: [
-                                  CustomText(
-                                    'الكنية',
-                                    color: ColorManager.black,
-                                    fontSize: 13,
-                                  ),
-                                  const SizedBox(height: 6),
-                                  CustomTextfield(
-                                    hint: 'مثال: الحسن',
-                                    hintColor: ColorManager.lightGray,
-                                    filled: true,
-                                    fillColor: ColorManager.lightBackground,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    focusColor: ColorManager.deepGreen,
+                                  Radio<bool>(
+                                    value: true,
+                                    groupValue: state.hasPreviousExperience,
+                                    activeColor: ColorManager.deepGreen,
                                     onChanged: (value) {
                                       context
                                           .read<VolunteerFormCubit>()
-                                          .updateLastName(value);
+                                          .updateHasPreviousExperience(true);
                                     },
+                                  ),
+                                  CustomText(
+                                    'نعم',
+                                    color: ColorManager.black,
+                                    fontSize: 13.sp,
                                   ),
                                 ],
                               ),
+                              SizedBox(width: 16.w),
+                              Row(
+                                children: [
+                                  Radio<bool>(
+                                    value: false,
+                                    groupValue: state.hasPreviousExperience,
+                                    activeColor: ColorManager.deepGreen,
+                                    onChanged: (value) {
+                                      context
+                                          .read<VolunteerFormCubit>()
+                                          .updateHasPreviousExperience(false);
+                                    },
+                                  ),
+                                  CustomText(
+                                    'لا',
+                                    color: ColorManager.black,
+                                    fontSize: 13.sp,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8.h),
+                          const _FieldLabel(
+                              'لماذا ترغب بالتطوع مع مديرية الثقافية؟'),
+                          SizedBox(height: 6.h),
+                          CustomTextfield(
+                            hint: 'اكتب هنا...',
+                            hintColor: ColorManager.lightGray,
+                            maxLines: 3,
+                            filled: true,
+                            fillColor: ColorManager.lightBackground,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusColor: ColorManager.deepGreen,
+                            onChanged: (value) {
+                              context
+                                  .read<VolunteerFormCubit>()
+                                  .updateVolunteerMotivation(value);
+                            },
+                          ),
+                          SizedBox(height: 14.h),
+                          const _FieldLabel('الخبرات السابقة',
+                              required: false),
+                          SizedBox(height: 6.h),
+                          CustomTextfield(
+                            hint: 'اذكر تجاربك التطوعية أو الخبرة المشابهة...',
+                            hintColor: ColorManager.lightGray,
+                            maxLines: 3,
+                            filled: true,
+                            fillColor: ColorManager.lightBackground,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusColor: ColorManager.deepGreen,
+                            onChanged: (value) {
+                              context
+                                  .read<VolunteerFormCubit>()
+                                  .updatePreviousExperience(value);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 16.h),
+
+                // ───────────── مجالات التطوع ─────────────
+                SectionCard(
+                  icon: Icons.volunteer_activism_outlined,
+                  title: 'مجالات التطوع *',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      final fields = [
+                        'إعلامي (تصميم - تصوير- مونتاج)',
+                        'المشاركة في الأنشطة',
+                        'المشاركة في تنسيق الفعاليات',
+                        'تقديم التدريب للأطفال',
+                        'المشاركة في إقامة الورشات الفنية',
+                        'العلاقات العامة',
+                        'أخرى',
+                      ];
+                      return Column(
+                        children: [
+                          ...fields.map((field) {
+                            final isChecked = state.selectedVolunteerFields
+                                .contains(field);
+                            return CheckboxRow(
+                              label: field,
+                              checked: isChecked,
+                              onTap: () {
+                                context
+                                    .read<VolunteerFormCubit>()
+                                    .toggleVolunteerField(field);
+                              },
+                            );
+                          }),
+                          if (state.selectedVolunteerFields
+                              .contains('أخرى')) ...[
+                            SizedBox(height: 12.h),
+                            const _FieldLabel('يرجى توضيح مجال التطوع الآخر'),
+                            SizedBox(height: 6.h),
+                            CustomTextfield(
+                              hint: 'اكتب المجال الآخر...',
+                              hintColor: ColorManager.lightGray,
+                              filled: true,
+                              fillColor: ColorManager.lightBackground,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14.r),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusColor: ColorManager.deepGreen,
+                              onChanged: (value) {
+                                context
+                                    .read<VolunteerFormCubit>()
+                                    .updateOtherVolunteerFieldDetails(value);
+                              },
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 14),
-                        CustomText(
-                          'البريد الإلكتروني',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        CustomTextfield(
-                          hint: 'name@example.com',
-                          hintColor: ColorManager.lightGray,
-                          keyboardType: TextInputType.emailAddress,
-                          filled: true,
-                          fillColor: ColorManager.lightBackground,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusColor: ColorManager.deepGreen,
-                          onChanged: (value) {
-                            context.read<VolunteerFormCubit>().updateEmail(
-                              value,
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 14),
-                        CustomText(
-                          'رقم الهاتف (واتساب)',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        CustomTextfield(
-                          hint: '09xx xxx xxx',
-                          hintColor: ColorManager.lightGray,
-                          keyboardType: TextInputType.phone,
-                          filled: true,
-                          fillColor: ColorManager.lightBackground,
-                          prefixIcon: const Icon(
-                            Icons.phone_outlined,
-                            color: ColorManager.gray,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusColor: ColorManager.deepGreen,
-                          onChanged: (value) {
-                            context.read<VolunteerFormCubit>().updatePhone(
-                              value,
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 14),
-                        CustomText(
-                          'تاريخ الميلاد',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        CustomTextfield(
-                          hint: 'dd / MM / yyyy',
-                          hintColor: ColorManager.lightGray,
-                          filled: true,
-                          fillColor: ColorManager.lightBackground,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusColor: ColorManager.deepGreen,
-                          onChanged: (value) {
-                            context.read<VolunteerFormCubit>().updateBirthPlace(
-                              value,
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 14),
-                        CustomText(
-                          'مكان الإقامة',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        CustomTextfield(
-                          hint: 'مثال: دمشق',
-                          hintColor: ColorManager.lightGray,
-                          filled: true,
-                          fillColor: ColorManager.lightBackground,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusColor: ColorManager.deepGreen,
-                          onChanged: (value) {
-                            context.read<VolunteerFormCubit>().updateResidence(
-                              value,
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
-              // ───────────── التعليم ─────────────
-              SectionCard(
-                icon: Icons.school_outlined,
-                title: 'التعليم',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          'المستوى التعليمي',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          decoration: BoxDecoration(
-                            color: ColorManager.lightBackground,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: state.educationLevel,
-                              isExpanded: true,
-                              hint: CustomText(
-                                'اختر المستوى',
-                                color: ColorManager.lightGray,
-                                fontSize: 13,
-                              ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: ColorManager.gray,
-                              ),
-                              items:
-                                  [
-                                    'ثانوي',
-                                    'دبلوم',
-                                    'إدارة الأعمال',
-                                    'بكالوريوس',
-                                    'ماجستير',
-                                    'دكتوراه',
-                                  ].map((level) {
-                                    return DropdownMenuItem(
-                                      value: level,
-                                      child: CustomText(
-                                        level,
-                                        color: ColorManager.black,
-                                        fontSize: 13,
-                                      ),
-                                    );
-                                  }).toList(),
-                              onChanged: (value) {
-                                if (value != null) {
+                // ───────────── المعدات والأدوات ─────────────
+                SectionCard(
+                  icon: Icons.handyman_outlined,
+                  title: 'المعدات والأدوات *',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      final tools = [
+                        'كاميرا',
+                        'لابتوب',
+                        'لا أملك معدات',
+                        'أخرى'
+                      ];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const _FieldLabel('هل تمتلك أدوات أو معدات خاصة؟'),
+                          SizedBox(height: 6.h),
+                          Wrap(
+                            spacing: 16,
+                            runSpacing: 4,
+                            children: tools.map((tool) {
+                              final isChecked =
+                                  state.selectedTools.contains(tool);
+                              return CheckboxRow(
+                                label: tool,
+                                checked: isChecked,
+                                compact: true,
+                                onTap: () {
                                   context
                                       .read<VolunteerFormCubit>()
-                                      .updateEducationLevel(value);
-                                }
-                              },
-                            ),
+                                      .toggleTool(tool);
+                                },
+                              );
+                            }).toList(),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // ───────────── الخبرة السابقة ─────────────
-              SectionCard(
-                icon: Icons.headset_mic_outlined,
-                title: 'الخبرة السابقة',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          'هل تطوعت سابقاً؟',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Radio<bool>(
-                                  value: true,
-                                  groupValue: state.hasPreviousExperience,
-                                  activeColor: ColorManager.deepGreen,
-                                  onChanged: (value) {
-                                    context
-                                        .read<VolunteerFormCubit>()
-                                        .updateHasPreviousExperience(true);
-                                  },
-                                ),
-                                CustomText(
-                                  'نعم',
-                                  color: ColorManager.black,
-                                  fontSize: 13,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(width: 16),
-                            Row(
-                              children: [
-                                Radio<bool>(
-                                  value: false,
-                                  groupValue: state.hasPreviousExperience,
-                                  activeColor: ColorManager.deepGreen,
-                                  onChanged: (value) {
-                                    context
-                                        .read<VolunteerFormCubit>()
-                                        .updateHasPreviousExperience(false);
-                                  },
-                                ),
-                                CustomText(
-                                  'لا',
-                                  color: ColorManager.black,
-                                  fontSize: 13,
-                                ),
-                              ],
+                          if (state.selectedTools.contains('أخرى')) ...[
+                            SizedBox(height: 12.h),
+                            const _FieldLabel(
+                                'يرجى توضيح المعدات أو الأدوات الأخرى'),
+                            SizedBox(height: 6.h),
+                            CustomTextfield(
+                              hint: 'اكتب المعدات أو الأدوات الأخرى...',
+                              hintColor: ColorManager.lightGray,
+                              filled: true,
+                              fillColor: ColorManager.lightBackground,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14.r),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusColor: ColorManager.deepGreen,
+                              onChanged: (value) {
+                                context
+                                    .read<VolunteerFormCubit>()
+                                    .updateOtherToolDetails(value);
+                              },
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 8),
-                        CustomText(
-                          'لماذا ترغب بالتطوع مع مديرية الثقافية؟',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        CustomTextfield(
-                          hint: 'اكتب هنا...',
-                          hintColor: ColorManager.lightGray,
-                          maxLines: 3,
-                          filled: true,
-                          fillColor: ColorManager.lightBackground,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusColor: ColorManager.deepGreen,
-                          onChanged: (value) {
-                            context
-                                .read<VolunteerFormCubit>()
-                                .updateVolunteerMotivation(value);
-                          },
-                        ),
-                        const SizedBox(height: 14),
-                        CustomText(
-                          'الخبرات السابقة',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        CustomTextfield(
-                          hint: 'اذكر تجاربك التطوعية أو الخبرة المشابهة...',
-                          hintColor: ColorManager.lightGray,
-                          maxLines: 3,
-                          filled: true,
-                          fillColor: ColorManager.lightBackground,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusColor: ColorManager.deepGreen,
-                          onChanged: (value) {
-                            context
-                                .read<VolunteerFormCubit>()
-                                .updatePreviousExperience(value);
-                          },
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
-              // ───────────── مجالات التطوع ─────────────
-              SectionCard(
-                icon: Icons.volunteer_activism_outlined,
-                title: 'مجالات التطوع',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    final fields = [
-                      'إعلامي (تصميم - تصوير- مونتاج)',
-                      'المشاركة في الأنشطة',
-                      'المشاركة في تنسيق الفعاليات',
-                      'تقديم التدريب للأطفال',
-                      'المشاركة في إقامة الورشات الفنية',
-                      'العلاقات العامة',
-                      'أخرى',
-                    ];
-                    return Column(
-                      children: [
-                        ...fields.map((field) {
-                          final isChecked = state.selectedVolunteerFields
-                              .contains(field);
+                // ───────────── المراكز المفضلة ─────────────
+                SectionCard(
+                  icon: Icons.location_city_outlined,
+                  title: 'المراكز المفضلة *',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      return Column(
+                        children: VolunteerFormCubit.centersMap.entries
+                            .map((entry) {
+                          final isChecked =
+                              state.selectedCenterIds.contains(entry.key);
                           return CheckboxRow(
-                            label: field,
+                            label: entry.value,
                             checked: isChecked,
                             onTap: () {
                               context
                                   .read<VolunteerFormCubit>()
-                                  .toggleVolunteerField(field);
+                                  .toggleCenter(entry.key);
                             },
                           );
-                        }),
-                        if (state.selectedVolunteerFields.contains('أخرى')) ...[
-                          const SizedBox(height: 12),
-                          CustomText(
-                            'يرجى توضيح مجال التطوع الآخر',
-                            color: ColorManager.black,
-                            fontSize: 13,
-                          ),
-                          const SizedBox(height: 6),
-                          CustomTextfield(
-                            hint: 'اكتب المجال الآخر...',
-                            hintColor: ColorManager.lightGray,
-                            filled: true,
-                            fillColor: ColorManager.lightBackground,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusColor: ColorManager.deepGreen,
-                            onChanged: (value) {
-                              context
-                                  .read<VolunteerFormCubit>()
-                                  .updateOtherVolunteerFieldDetails(value);
-                            },
-                          ),
-                        ],
-                      ],
-                    );
-                  },
+                        }).toList(),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
-              // ───────────── المعدات والأدوات ─────────────
-              SectionCard(
-                icon: Icons.handyman_outlined,
-                title: 'المعدات والأدوات',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    final tools = ['كاميرا', 'لابتوب', 'لا أملك معدات', 'أخرى'];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          'هل تمتلك أدوات أو معدات خاصة؟',
-                          color: ColorManager.black,
-                          fontSize: 13,
-                        ),
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 16,
-                          runSpacing: 4,
-                          children: tools.map((tool) {
-                            final isChecked = state.selectedTools.contains(
-                              tool,
-                            );
+                // ───────────── التوقيتات المقترحة ─────────────
+                SectionCard(
+                  icon: Icons.access_time,
+                  title: 'الأوقات المتاحة *',
+                  child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                    builder: (context, state) {
+                      final timings = [
+                        'في أي وقت',
+                        'الجمعة والسبت',
+                        'من الأحد إلى الخميس صباحاً',
+                        'من الأحد إلى الخميس مساءً',
+                        'أونلاين',
+                        'أخرى',
+                      ];
+                      return Column(
+                        children: [
+                          ...timings.map((timing) {
+                            final isChecked =
+                                state.selectedTimings.contains(timing);
                             return CheckboxRow(
-                              label: tool,
+                              label: timing,
                               checked: isChecked,
-                              compact: true,
                               onTap: () {
-                                context.read<VolunteerFormCubit>().toggleTool(
-                                  tool,
-                                );
+                                context
+                                    .read<VolunteerFormCubit>()
+                                    .toggleTiming(timing);
                               },
                             );
-                          }).toList(),
+                          }),
+                          if (state.selectedTimings.contains('أخرى')) ...[
+                            SizedBox(height: 12.h),
+                            const _FieldLabel('يرجى توضيح الوقت الآخر'),
+                            SizedBox(height: 6.h),
+                            CustomTextfield(
+                              hint: 'اكتب الوقت الآخر...',
+                              hintColor: ColorManager.lightGray,
+                              filled: true,
+                              fillColor: ColorManager.lightBackground,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14.r),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusColor: ColorManager.deepGreen,
+                              onChanged: (value) {
+                                context
+                                    .read<VolunteerFormCubit>()
+                                    .updateOtherTimingDetails(value);
+                              },
+                            ),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 16.h),
+
+                // ───────────── معلومة أخرى ─────────────
+                SectionCard(
+                  icon: Icons.info_outline,
+                  title: 'إضافة أخرى',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _FieldLabel('هل عندك ملاحظات إضافية؟',
+                          required: false),
+                      SizedBox(height: 6.h),
+                      CustomTextfield(
+                        hint: 'أي معلومات تود إضافتها...',
+                        hintColor: ColorManager.lightGray,
+                        maxLines: 3,
+                        filled: true,
+                        fillColor: ColorManager.lightBackground,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14.r),
+                          borderSide: BorderSide.none,
                         ),
-                        if (state.selectedTools.contains('أخرى')) ...[
-                          const SizedBox(height: 12),
-                          CustomText(
-                            'يرجى توضيح المعدات أو الأدوات الأخرى',
-                            color: ColorManager.black,
-                            fontSize: 13,
-                          ),
-                          const SizedBox(height: 6),
-                          CustomTextfield(
-                            hint: 'اكتب المعدات أو الأدوات الأخرى...',
-                            hintColor: ColorManager.lightGray,
-                            filled: true,
-                            fillColor: ColorManager.lightBackground,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusColor: ColorManager.deepGreen,
-                            onChanged: (value) {
-                              context
-                                  .read<VolunteerFormCubit>()
-                                  .updateOtherToolDetails(value);
-                            },
-                          ),
-                        ],
-                      ],
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // ───────────── المراكز المفضلة ─────────────
-              SectionCard(
-                icon: Icons.location_city_outlined,
-                title: 'المراكز المفضلة',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    final centers = {
-                      '1': 'التطوع مع فريق مديرية الثقافة',
-                      '2': 'مركز برزة',
-                      '3': 'مركز العدوي',
-                      '4': 'مركز الميدان',
-                      '5': 'مركز المزة',
-                      '6': 'مركز أبو رمانة',
-                      '7': 'مركز كفر سوسة',
-                    };
-                    return Column(
-                      children: centers.entries.map((entry) {
-                        final isChecked = state.selectedCenterIds.contains(
-                          entry.key,
-                        );
-                        return CheckboxRow(
-                          label: entry.value,
-                          checked: isChecked,
-                          onTap: () {
-                            context.read<VolunteerFormCubit>().toggleCenter(
-                              entry.key,
-                            );
-                          },
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // ───────────── التوقيتات المقترحة ─────────────
-              SectionCard(
-                icon: Icons.access_time,
-                title: 'الأوقات المتاحة',
-                child: BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
-                  builder: (context, state) {
-                    final timings = [
-                      'في أي وقت',
-                      'الجمعة والسبت',
-                      'من الأحد إلى الخميس صباحاً',
-                      'من الأحد إلى الخميس مساءً',
-                      'أونلاين',
-                      'أخرى',
-                    ];
-                    return Column(
-                      children: [
-                        ...timings.map((timing) {
-                          final isChecked = state.selectedTimings.contains(
-                            timing,
-                          );
-                          return CheckboxRow(
-                            label: timing,
-                            checked: isChecked,
-                            onTap: () {
-                              context
-                                  .read<VolunteerFormCubit>()
-                                  .toggleTiming(timing);
-                            },
-                          );
-                        }),
-                        if (state.selectedTimings.contains('أخرى')) ...[
-                          const SizedBox(height: 12),
-                          CustomText(
-                            'يرجى توضيح الوقت الآخر',
-                            color: ColorManager.black,
-                            fontSize: 13,
-                          ),
-                          const SizedBox(height: 6),
-                          CustomTextfield(
-                            hint: 'اكتب الوقت الآخر...',
-                            hintColor: ColorManager.lightGray,
-                            filled: true,
-                            fillColor: ColorManager.lightBackground,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusColor: ColorManager.deepGreen,
-                            onChanged: (value) {
-                              context
-                                  .read<VolunteerFormCubit>()
-                                  .updateOtherTimingDetails(value);
-                            },
-                          ),
-                        ],
-                      ],
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // ───────────── معلومة أخرى ─────────────
-              SectionCard(
-                icon: Icons.info_outline,
-                title: 'إضافة أخرى',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      'هل عندك ملاحظات إضافية؟',
-                      color: ColorManager.black,
-                      fontSize: 13,
-                    ),
-                    const SizedBox(height: 6),
-                    CustomTextfield(
-                      hint: 'أي معلومات تود إضافتها...',
-                      hintColor: ColorManager.lightGray,
-                      maxLines: 3,
-                      filled: true,
-                      fillColor: ColorManager.lightBackground,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide.none,
+                        focusColor: ColorManager.deepGreen,
+                        onChanged: (value) {
+                          context
+                              .read<VolunteerFormCubit>()
+                              .updateAdditionalInfo(value);
+                        },
                       ),
-                      focusColor: ColorManager.deepGreen,
-                      onChanged: (value) {
-                        context.read<VolunteerFormCubit>().updateAdditionalInfo(
-                          value,
-                        );
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                SizedBox(height: 24.h),
 
-              // زر الإرسال
-              CustomElevatedButton(
-                onPressed: () {
-                  context.read<VolunteerFormCubit>().submit();
-                },
-                backgroundColor: ColorManager.deepGreen,
-                foregroundColor: ColorManager.titleWhite,
-                radius: 28,
-                fixedSize: const Size(double.infinity, 56),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomText(
-                      'إرسال الطلب',
-                      color: ColorManager.titleWhite,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.send, size: 18),
-                  ],
+                // ====================== زر الإرسال ======================
+                BlocBuilder<VolunteerFormCubit, VolunteerFormState>(
+                  builder: (context, state) {
+                    return CustomElevatedButton(
+                      onPressed: state.isSubmitting
+                          ? null
+                          : () {
+                              context.read<VolunteerFormCubit>().submit();
+                            },
+                      backgroundColor: ColorManager.deepGreen,
+                      foregroundColor: ColorManager.titleWhite,
+                      radius: 28.r,
+                      fixedSize: const Size(double.infinity, 56),
+                      child: state.isSubmitting
+                          ? SizedBox(
+                              width: 24.w,
+                              height: 24.h,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomText(
+                                  'إرسال الطلب',
+                                  color: ColorManager.titleWhite,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                SizedBox(width: 8.w),
+                                Icon(Icons.send, size: 18.sp),
+                              ],
+                            ),
+                    );
+                  },
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+                SizedBox(height: 20.h),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
-
-
-
-

@@ -37,7 +37,7 @@ class HallDetails extends StatelessWidget {
                   return Stack(
                     children: [
                       SizedBox(
-                        height: 400,
+                        height: 400.h,
                         width: double.infinity,
                         child: PageView.builder(
                           controller: cubit.controller,
@@ -51,7 +51,7 @@ class HallDetails extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        height: 400,
+                        height: 400.h,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -64,9 +64,9 @@ class HallDetails extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        top: 50,
-                        left: 16,
-                        right: 16,
+                        top: 50.h,
+                        left: 16.w,
+                        right: 16.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -99,35 +99,35 @@ class HallDetails extends StatelessWidget {
               child: CustomContainer(
                 width: double.infinity,
                 color: ColorManager.titleWhite,
-                radius: 24,
+                radius: 24.r,
                 paddingAll: 20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     CustomText(
                       'Facilities & Support',
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.darkForestGreen,
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
                       children: const [
-                        FacilityChip(icon: Icons.wifi, label: 'Free WiFi'),
+                        FacilityChip(icon: Icons.wifi, label: 'واي فاي مجاني'),
                         FacilityChip(
                           icon: Icons.local_cafe,
-                          label: 'Premium Cafe',
+                          label: 'مقهى مميز',
                         ),
                         FacilityChip(
                           icon: Icons.local_parking,
-                          label: 'Valet Parking',
+                          label: 'خدمة صف السيارات',
                         ),
                         FacilityChip(
                           icon: Icons.accessible,
-                          label: 'Accessibility Support',
+                          label: 'دعم ذوي الاحتياجات الخاصة',
                         ),
                       ],
                     ),
@@ -138,37 +138,37 @@ class HallDetails extends StatelessWidget {
 
             // ─── التاريخ والوقت ────────────────────────────
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: BlocProvider(
                 create: (_) => BookingCubit(
                   // مؤقتاً حتى يصل الباك اند
                   availableTimes: const [
-                    '09:00 AM',
-                    '11:30 AM',
-                    '02:00 PM',
-                    '04:30 PM',
+                    '09:00 ص',
+                    '11:30 ص',
+                    '02:00 م',
+                    '04:30 م',
                   ],
                 ),
                 child: const BookingDateTimePicker(),
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: CustomElevatedButton(
                 onPressed: () {},
                 backgroundColor: ColorManager.deepGreen,
                 foregroundColor: ColorManager.titleWhite,
-                radius: 28,
+                radius: 28.r,
                 fixedSize: const Size(double.infinity, 58),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
-                      'Next',
+                      'التالي',
                       color: ColorManager.titleWhite,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
                     SizedBox(width: 10.w),
@@ -177,7 +177,7 @@ class HallDetails extends StatelessWidget {
                 ),
               ),
             ),
-             const SizedBox(height: 24),
+             SizedBox(height: 24.h),
           ],
         ),
       ),

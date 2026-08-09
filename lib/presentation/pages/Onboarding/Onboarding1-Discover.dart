@@ -3,6 +3,7 @@ import 'package:directorateofculture/Constant/color_manager.dart';
 import 'package:directorateofculture/presentation/util/custom_elevatedButton.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Onboarding1Discover extends StatelessWidget {
@@ -18,35 +19,35 @@ class Onboarding1Discover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
         children: [
-          const SizedBox(height: 40),
+          SizedBox(height: 40.h),
           Align(
             alignment: Alignment.centerRight,
-            child: CustomText("Skip", color: ColorManager.black, fontSize: 20),
+            child: CustomText('تخطي', color: ColorManager.black, fontSize: 20.sp),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           ClipRRect(
-            borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(26.r),
             child: Image.asset(AssetsManager.onboarding1Discover),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           CustomText(
-            "Discover Cultural Events",
+            'اكتشف الفعاليات الثقافية',
             color: ColorManager.deepGreen,
-            fontSize: 30,
+            fontSize: 30.sp,
             fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           CustomText(
-            "Explore exhibitions, workshops,\nand activities near you.",
+            'تصفح المعارض والورشات\nوالأنشطة القريبة منك.',
             color: ColorManager.deepGreen,
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           SmoothPageIndicator(
             controller: pageController,
             count: 3,
@@ -58,23 +59,23 @@ class Onboarding1Discover extends StatelessWidget {
               expansionFactor: 4,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           CustomElevatedButton(
             onPressed: onNext,
             backgroundColor: ColorManager.deepGreen,
             foregroundColor: ColorManager.titleWhite,
-            radius: 30,
+            radius: 30.r,
             fixedSize: const Size(double.infinity, 55),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomText(
-                  "Next",
+                  'التالي',
                   color: ColorManager.titleWhite,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 const Icon(Icons.arrow_forward),
               ],
             ),

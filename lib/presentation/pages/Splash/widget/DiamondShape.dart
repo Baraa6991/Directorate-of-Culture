@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:directorateofculture/presentation/util/custom_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class Diamondshape extends StatelessWidget {
   final double top;
@@ -22,9 +24,9 @@ class Diamondshape extends StatelessWidget {
       child: Transform.rotate(
         angle: math.pi / 4,
         child: SizedBox(
-          width: 25,
-          height: 25,
-          child: CustomContainer(color: color, borderWidth: 1.5, radius: 2),
+          width: 25.w,
+          height: 25.h,
+          child: CustomContainer(color: color, borderWidth: 1.5, radius: 2.r),
         ),
       ),
     );
@@ -39,14 +41,14 @@ class DiamondPattern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 130,
-      height: 130,
+      width: 120.w,
+      height: 130.h,
       child: Stack(
         children: [
-          Diamondshape(top: 10, left: 50, color: color),
-          Diamondshape(top: 45, left: 10, color: color),
-          Diamondshape(top: 45, left: 90, color: color),
-          Diamondshape(top: 80, left: 50, color: color),
+          Diamondshape(top: 10.h, left: 50.w, color: color),
+          Diamondshape(top: 45.h, left: 10.w, color: color),
+          Diamondshape(top: 45.h, left: 90.w, color: color),
+          Diamondshape(top: 80.h, left: 50.w, color: color),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextfield extends StatelessWidget {
   // ─── التحكم ───────────────────────────────────────────────
@@ -155,7 +156,7 @@ class CustomTextfield extends StatelessWidget {
         border: border,
         enabledBorder: border,
         focusedBorder: border?.copyWith(
-          borderSide: BorderSide(color: focusColor!, width: 2),
+          borderSide: BorderSide(color: focusColor!, width: 2.w),
         ),
       ),
       obscureText: obscureText,

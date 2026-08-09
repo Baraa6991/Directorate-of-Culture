@@ -1,6 +1,8 @@
 class CulturalSite {
   final String id;
   final String name;
+  final String location;
+  final String? mapLocation;
   final double latitude;
   final double longitude;
   final IconDataType iconType;
@@ -10,6 +12,8 @@ class CulturalSite {
   CulturalSite({
     required this.id,
     required this.name,
+    required this.location,
+    this.mapLocation,
     required this.latitude,
     required this.longitude,
     required this.iconType,

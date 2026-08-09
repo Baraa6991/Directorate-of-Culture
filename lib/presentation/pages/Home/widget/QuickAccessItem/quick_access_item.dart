@@ -1,6 +1,8 @@
 import 'package:directorateofculture/Constant/color_manager.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class QuickAccessItem {
   final IconData icon;
@@ -52,14 +54,14 @@ class QuickAccessGrid extends StatelessWidget {
           Row(
             children: [
               Expanded(child: _QuickAccessCard(item: data[row])),
-              const SizedBox(width: 14),
+              SizedBox(width: 14.w),
               if (row + 1 < data.length)
                 Expanded(child: _QuickAccessCard(item: data[row + 1]))
               else
                 const Expanded(child: SizedBox()),
             ],
           ),
-          if (row + 2 < data.length) const SizedBox(height: 14),
+          if (row + 2 < data.length) SizedBox(height: 14.h),
         ],
       ],
     );
@@ -76,10 +78,10 @@ class _QuickAccessCard extends StatelessWidget {
     return GestureDetector(
       onTap: item.onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 22),
+        padding: EdgeInsets.symmetric(vertical: 22.h),
         decoration: BoxDecoration(
           color: ColorManager.titleWhite,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(18.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -92,8 +94,8 @@ class _QuickAccessCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              height: 50,
-              width: 50,
+              height: 50.h,
+              width: 50.w,
               decoration: BoxDecoration(
                 color: ColorManager.lightBackground,
                 shape: BoxShape.circle,
@@ -101,14 +103,14 @@ class _QuickAccessCard extends StatelessWidget {
               child: Icon(
                 item.icon,
                 color: ColorManager.deepGreen,
-                size: 26,
+                size: 26.sp,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             CustomText(
               item.label,
               color: ColorManager.deepGreen,
-              fontSize: 15,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w600,
             ),
           ],

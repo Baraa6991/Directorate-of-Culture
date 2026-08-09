@@ -7,6 +7,7 @@ import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:directorateofculture/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
 class Otpvalidation extends StatelessWidget {
@@ -22,7 +23,7 @@ class Otpvalidation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OtpValidationCubit(repository: ApiRepository()),
+      create: (context) => OtpValidationCubit(repository: AuthRepository()),
       child: _OtpValidationView(phone: phone, flow: flow),
     );
   }
@@ -42,7 +43,7 @@ class _OtpValidationView extends StatelessWidget {
       backgroundColor: ColorManager.titleWhite,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: BlocListener<OtpValidationCubit, OtpValidationState>(
             listener: (context, state) {
               if (state is OtpValidationSuccess) {
@@ -61,54 +62,54 @@ class _OtpValidationView extends StatelessWidget {
             },
             child: Column(
               children: [
-                const SizedBox(height: 100),
+                SizedBox(height: 100.h),
                 GestureDetector(
                   onTap: () => Navigator.of(context).maybePop(),
                   child: const Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.centerRight,
                     child: Icon(Icons.arrow_back),
                   ),
                 ),
-                const SizedBox(height: 150),
+                SizedBox(height: 150.h),
                 CustomText(
-                  'Verify Your Number',
+                  'تحقق من رقمك',
                   fontWeight: FontWeight.w600,
-                  fontSize: 24,
+                  fontSize: 20.sp,
                   textAlign: TextAlign.center,
                   color: ColorManager.black,
                 ),
-                const SizedBox(height: 15),
+                SizedBox(height: 15.h),
                 CustomText(
-                  'Enter the 4-digit verification code \nsent to your phone.',
+                  'أدخل رمز التحقق المكوّن من 6 أرقام\nالمرسل إلى هاتفك.',
                   fontWeight: FontWeight.w400,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   textAlign: TextAlign.center,
                   color: ColorManager.black,
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h),
                 Pinput(
                   length: 6,
                   defaultPinTheme: PinTheme(
-                    width: 60,
-                    height: 80,
+                    width: 60.w,
+                    height: 80.h,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(19),
+                      borderRadius: BorderRadius.circular(19.r),
                     ),
                   ),
                   focusedPinTheme: PinTheme(
-                    width: 60,
-                    height: 80,
+                    width: 60.w,
+                    height: 80.h,
                     decoration: BoxDecoration(
-                      border: Border.all(color: ColorManager.deepGreen, width: 2),
-                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: ColorManager.deepGreen, width: 2.w),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   onCompleted: (pin) {
                     currentCode.value = pin;
                   },
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h),
                 BlocBuilder<OtpValidationCubit, OtpValidationState>(
                   builder: (context, state) {
                     final isLoading = state is OtpValidationLoading;
@@ -124,12 +125,12 @@ class _OtpValidationView extends StatelessWidget {
                             },
                       backgroundColor: ColorManager.deepGreen,
                       foregroundColor: ColorManager.titleWhite,
-                      radius: 30,
+                      radius: 30.r,
                       fixedSize: const Size(double.infinity, 55),
                       child: isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
+                          ? SizedBox(
+                              width: 24.w,
+                              height: 24.h,
                               child: CircularProgressIndicator(
                                 color: Colors.white,
                                 strokeWidth: 2.5,
@@ -139,9 +140,9 @@ class _OtpValidationView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomText(
-                                  "Check Code",
+                                  'تحقق من الرمز',
                                   color: ColorManager.titleWhite,
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ],
@@ -149,7 +150,7 @@ class _OtpValidationView extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 BlocBuilder<OtpValidationCubit, OtpValidationState>(
                   builder: (context, state) {
                     final isResending = state is OtpResendLoading;
@@ -167,19 +168,19 @@ class _OtpValidationView extends StatelessWidget {
                         children: [
                           isResending
                               ? SizedBox(
-                                  width: 16,
-                                  height: 16,
+                                  width: 16.w,
+                                  height: 16.h,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
                                     color: ColorManager.deepGreen,
                                   ),
                                 )
                               : Icon(Icons.refresh, color: ColorManager.deepGreen),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           CustomText(
-                            "Resend Code",
+                            'إعادة إرسال الرمز',
                             color: ColorManager.deepGreen,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ],

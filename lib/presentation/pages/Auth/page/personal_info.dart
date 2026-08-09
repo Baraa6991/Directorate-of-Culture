@@ -17,6 +17,7 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
+
 class PersonalInfo extends StatelessWidget {
   const PersonalInfo({super.key});
 
@@ -26,7 +27,7 @@ class PersonalInfo extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => PersonalInfoCubit()),
         BlocProvider(
-          create: (context) => RegisterCubit(repository: ApiRepository()),
+          create: (context) => RegisterCubit(repository: AuthRepository()),
         ),
       ],
       child: const _PersonalInfoView(),
@@ -71,11 +72,11 @@ class _PersonalInfoView extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 18,
-              left: 18,
+              top: 18.h,
+              left: 18.w,
               child: Container(
-                width: 32,
-                height: 32,
+                width: 32.w,
+                height: 32.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: ColorManager.deepGreen,
@@ -109,9 +110,9 @@ class _PersonalInfoView extends StatelessWidget {
                         ),
                         const Spacer(),
                         CustomText(
-                          'We Need Some Info About You!',
+                          'نحتاج بعض المعلومات عنك!',
                           color: ColorManager.titleWhite,
-                          fontSize: 24,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.w600,
                           height: 1.2,
                         ),
@@ -145,16 +146,16 @@ class _PersonalInfoView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            'First Name',
+                            'الاسم الأول',
                             color: ColorManager.darkForestGreen,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 8.h),
                           CustomTextfield(
                             controller: personalInfoCubit.firstNameController,
                             cursorColor: ColorManager.deepGreen,
-                            hint: 'e.g. Ahmed',
+                            hint: 'مثال: أحمد',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18.r),
                             ),
@@ -163,16 +164,16 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 18.h),
                           CustomText(
-                            'Last Name',
+                            'اسم العائلة',
                             color: ColorManager.darkForestGreen,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 8.h),
                           CustomTextfield(
                             controller: personalInfoCubit.lastNameController,
                             cursorColor: ColorManager.deepGreen,
-                            hint: 'e.g. Mansour',
+                            hint: 'مثال: منصور',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18.r),
                             ),
@@ -181,9 +182,9 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 18.h),
                           CustomText(
-                            'Birthdate',
+                            'تاريخ الميلاد',
                             color: ColorManager.darkForestGreen,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 8.h),
@@ -214,7 +215,7 @@ class _PersonalInfoView extends StatelessWidget {
                                       itemStyle: TextStyle(
                                         color: ColorManager.darkForestGreen,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 18.sp,
+                                        fontSize: 16.sp,
                                       ),
                                       doneStyle: TextStyle(
                                         color: ColorManager.deepGreen,
@@ -234,7 +235,7 @@ class _PersonalInfoView extends StatelessWidget {
                                   );
                                 },
                                 cursorColor: ColorManager.deepGreen,
-                                hint: 'DD / MM / YYYY',
+                                hint: 'يوم / شهر / سنة',
                                 suffixIcon: IconButton(
                                   onPressed: () {},
                                   icon: const Icon(
@@ -251,9 +252,9 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 18.h),
                           CustomText(
-                            'Phone Number',
+                            'رقم الهاتف',
                             color: ColorManager.darkForestGreen,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 10.h),
@@ -261,7 +262,7 @@ class _PersonalInfoView extends StatelessWidget {
                             decoration: InputDecoration(
                               hintText: '09xxxxxxxx',
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
                             ),
                             initialCountryCode: 'SY',
@@ -273,9 +274,9 @@ class _PersonalInfoView extends StatelessWidget {
                           ),
                           SizedBox(height: 18.h),
                           CustomText(
-                            'Gender',
+                            'الجنس',
                             color: ColorManager.darkForestGreen,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 10.h),
@@ -330,10 +331,10 @@ class _PersonalInfoView extends StatelessWidget {
                                             ),
                                             SizedBox(height: 8.h),
                                             CustomText(
-                                              'Male',
+                                              'ذكر',
                                               color:
                                                   ColorManager.darkForestGreen,
-                                              fontSize: 15,
+                                              fontSize: 15.sp,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ],
@@ -390,10 +391,10 @@ class _PersonalInfoView extends StatelessWidget {
                                             ),
                                             SizedBox(height: 8.h),
                                             CustomText(
-                                              'Female',
+                                              'أنثى',
                                               color:
                                                   ColorManager.darkForestGreen,
-                                              fontSize: 15,
+                                              fontSize: 15.sp,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ],
@@ -433,7 +434,7 @@ class _PersonalInfoView extends StatelessWidget {
                                     : () => _onNextPressed(context),
                                 backgroundColor: ColorManager.deepGreen,
                                 foregroundColor: ColorManager.titleWhite,
-                                radius: 28,
+                                radius: 28.r,
                                 fixedSize: const Size(double.infinity, 58),
                                 child: isLoading
                                     ? SizedBox(
@@ -449,9 +450,9 @@ class _PersonalInfoView extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           CustomText(
-                                            'Next',
+                                            'التالي',
                                             color: ColorManager.titleWhite,
-                                            fontSize: 16,
+                                            fontSize: 16.sp,
                                             fontWeight: FontWeight.w600,
                                           ),
                                           SizedBox(width: 10.w),
@@ -471,7 +472,7 @@ class _PersonalInfoView extends StatelessWidget {
                               CustomText(
                                 "Already have an account?",
                                 color: ColorManager.darkForestGreen,
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                               ),
 
@@ -489,7 +490,7 @@ class _PersonalInfoView extends StatelessWidget {
                                 child: CustomText(
                                   "Login",
                                   color: ColorManager.deepGreen,
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),

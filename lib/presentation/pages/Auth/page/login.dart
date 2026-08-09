@@ -8,6 +8,7 @@ import 'package:directorateofculture/presentation/util/custom_text.dart';
 import 'package:directorateofculture/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class Login extends StatelessWidget {
@@ -16,7 +17,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(repository: ApiRepository()),
+      create: (context) => LoginCubit(repository: AuthRepository()),
       child: const _LoginView(),
     );
   }
@@ -31,7 +32,7 @@ class _LoginView extends StatelessWidget {
       backgroundColor: ColorManager.titleWhite,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: BlocConsumer<LoginCubit, LoginState>(
             listener: (context, state) {
               if (state is LoginOtpSent) {
@@ -55,26 +56,26 @@ class _LoginView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomText(
-                    "Enter your phone number to access cultural experiences.",
-                    fontSize: 16,
+                    'أدخل رقم هاتفك للمتابعة إلى التجربة الثقافية.',
+                    fontSize: 16.sp,
                     color: ColorManager.black,
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.centerRight,
                     child: CustomText(
-                      "Phone Number",
-                      fontSize: 14,
+                      'رقم الهاتف',
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.black,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5.h),
                   IntlPhoneField(
                     decoration: InputDecoration(
                       hintText: '09xxxxxxxx',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                     ),
                     initialCountryCode: 'SY',
@@ -84,7 +85,7 @@ class _LoginView extends StatelessWidget {
                           .updatePhoneNumber(phone.completeNumber);
                     },
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
                   CustomElevatedButton(
                     onPressed: isLoading
                         ? null
@@ -93,12 +94,12 @@ class _LoginView extends StatelessWidget {
                           },
                     backgroundColor: ColorManager.deepGreen,
                     foregroundColor: ColorManager.titleWhite,
-                    radius: 30,
+                    radius: 30.r,
                     fixedSize: const Size(double.infinity, 55),
                     child: isLoading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
+                        ? SizedBox(
+                            width: 24.w,
+                            height: 24.h,
                             child: CircularProgressIndicator(
                               color: Colors.white,
                               strokeWidth: 2.5,
@@ -108,12 +109,12 @@ class _LoginView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CustomText(
-                                "Send Code",
+                                'إرسال الرمز',
                                 color: ColorManager.titleWhite,
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               const Icon(Icons.arrow_forward),
                             ],
                           ),

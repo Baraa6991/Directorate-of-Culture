@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final ApiRepository repository;
+  final AuthRepository repository;
 
   LoginCubit({required this.repository}) : super(LoginInitial());
 

@@ -1,18 +1,19 @@
 import 'package:bloc/bloc.dart';
+import 'package:directorateofculture/Helper/api_client.dart';
 import 'package:directorateofculture/Helper/cach_helper.dart';
+import 'package:directorateofculture/Helper/fcm_service.dart';
 import 'package:directorateofculture/repositories/auth_repository.dart';
 import 'package:flutter/foundation.dart';
-
 
 part 'otp_validation_state.dart';
 
 enum OtpFlowType { register, login }
 
 class OtpValidationCubit extends Cubit<OtpValidationState> {
-  final ApiRepository repository;
+  final AuthRepository repository;
 
   OtpValidationCubit({required this.repository})
-      : super(OtpValidationInitial());
+    : super(OtpValidationInitial());
 
   Future<void> verifyOtp({
     required String phone,
@@ -51,20 +52,27 @@ class OtpValidationCubit extends Cubit<OtpValidationState> {
           }
         }
 
-        emit(OtpValidationSuccess(
-          message: data['message'] ?? 'تم التحقق بنجاح',
-          token: token,
-        ));
+        // ✅ نسجّل توكن الجهاز هنا فقط، بعد حفظ توكن المصادقة فعلياً بالأعلى —
+        // وليس عند إرسال الـOTP كما كان سابقاً (كان يفشل دائماً بخطأ 401
+        // لأن المستخدم لم يكن مسجَّل دخوله بعد في تلك اللحظة).
+        await FcmService(ApiClient()).init();
+
+        emit(
+          OtpValidationSuccess(
+            message: data['message'] ?? 'تم التحقق بنجاح',
+            token: token,
+          ),
+        );
       } else {
-        emit(OtpValidationError(
-          message: data['message'] ?? 'رمز التحقق غير صحيح',
-        ));
+        emit(
+          OtpValidationError(message: data['message'] ?? 'رمز التحقق غير صحيح'),
+        );
       }
     } catch (e) {
       debugPrint('💥 Verify OTP error: $e');
-      emit(OtpValidationError(
-        message: e.toString().replaceAll('Exception: ', ''),
-      ));
+      emit(
+        OtpValidationError(message: e.toString().replaceAll('Exception: ', '')),
+      );
     }
   }
 
@@ -74,26 +82,29 @@ class OtpValidationCubit extends Cubit<OtpValidationState> {
   }) async {
     emit(OtpResendLoading());
     debugPrint('🔹 Resend OTP started... flow: $flow');
+    debugPrint('📞 Phone: $phone');
 
     try {
-      // ملاحظة: لو عندك endpoint مختلف لإعادة إرسال كود اللوغن أضفه هون بنفس المنطق
-      final data = await repository.resendOtp(phone: phone);
+      final data = flow == OtpFlowType.register
+          ? await repository.resendOtp(phone: phone)
+          : await repository.resendLoginOtp(phone: phone);
+
       debugPrint('📨 Resend response: $data');
 
       if (data['status'] == 'success') {
-        emit(OtpResendSuccess(
-          message: data['message'] ?? 'تم إعادة إرسال الرمز بنجاح',
-        ));
+        emit(
+          OtpResendSuccess(
+            message: data['message'] ?? 'تم إعادة إرسال الرمز بنجاح',
+          ),
+        );
       } else {
-        emit(OtpResendError(
-          message: data['message'] ?? 'تعذّر إعادة إرسال الرمز',
-        ));
+        emit(
+          OtpResendError(message: data['message'] ?? 'تعذّر إعادة إرسال الرمز'),
+        );
       }
     } catch (e) {
       debugPrint('💥 Resend OTP error: $e');
-      emit(OtpResendError(
-        message: e.toString().replaceAll('Exception: ', ''),
-      ));
+      emit(OtpResendError(message: e.toString().replaceAll('Exception: ', '')));
     }
   }
 }

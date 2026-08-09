@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:directorateofculture/Constant/color_manager.dart';
 import 'package:directorateofculture/presentation/util/custom_text.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class CheckboxRow extends StatelessWidget {
   final String label;
@@ -8,7 +10,8 @@ class CheckboxRow extends StatelessWidget {
   final VoidCallback onTap;
   final bool compact;
 
-  const CheckboxRow({super.key, 
+  const CheckboxRow({
+    super.key,
     required this.label,
     required this.checked,
     required this.onTap,
@@ -25,24 +28,24 @@ class CheckboxRow extends StatelessWidget {
           mainAxisSize: compact ? MainAxisSize.min : MainAxisSize.max,
           children: [
             Container(
-              width: 20,
-              height: 20,
+              width: 20.w,
+              height: 20.h,
               decoration: BoxDecoration(
                 color: checked ? ColorManager.deepGreen : Colors.transparent,
                 border: Border.all(
                   color: checked
                       ? ColorManager.deepGreen
                       : ColorManager.subtitleGreen,
-                  width: 1.5,
+                  width: 1.5.w,
                 ),
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(5.r),
               ),
               child: checked
-                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  ? Icon(Icons.check, size: 14.sp, color: Colors.white)
                   : null,
             ),
-            const SizedBox(width: 10),
-            CustomText(label, color: ColorManager.black, fontSize: 13),
+            SizedBox(width: 10.w),
+            CustomText(label, color: ColorManager.black, fontSize: 13.sp),
           ],
         ),
       ),
